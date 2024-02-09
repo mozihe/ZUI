@@ -3,6 +3,7 @@
 #include <SDL2_gfxPrimitives_font.h>
 #include <SDL2/SDL_image.h>
 #include "Text.h"
+#include "longPressButton.h"
 
 int main()
 {
@@ -16,8 +17,8 @@ int main()
     SDL_FreeSurface(imgSurface);
     ZUI::Button *button;
     button = ZUI::CreateButton({100, 100, 100, 100}, renderer, imgTexture);
-    ZUI::Button *button2;
-    button2 = ZUI::CreateButton({200, 200, 100, 100}, {255, 0, 0, 255}, {0, 255, 0, 255}, {0, 0, 255, 255}, renderer);
+    ZUI::LongPressButton *button2;
+    button2 = ZUI::CreateLongPressButton({200, 200, 100, 100}, {255, 0, 0, 255}, {0, 255, 0, 255}, {0, 0, 255, 255}, renderer);
     ZUI::Text *text;
     TTF_Font *font = TTF_OpenFont("../font/NotoSerifSC-VF.ttf", 24);
     text = ZUI::CreateText({320, 240}, {0, 0, 0, 255}, renderer, font, u8"你好, World!", true);
@@ -35,13 +36,14 @@ int main()
             if (button->IsPressed(&event))
                 running = false;
             if (button2->IsPressed(&event))
-                printf("Button2 Pressed\n");
+            {}
         }
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
         button->Draw();
         button2->Draw();
-        text->Draw();
+        if (button2->checkPressed())
+            text->Draw();
         SDL_RenderPresent(renderer);
 
         Uint32 frameTime = SDL_GetTicks() - frameStart;
